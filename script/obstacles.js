@@ -1,6 +1,6 @@
 //Obstacles class
 class Obstacles {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, side) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -12,6 +12,7 @@ class Obstacles {
 
     this.obstImgRight = new Image();
     this.obstImgRight.src = "./../images/cat-paw_ex_right.png";
+    this.side = side;
   }
 
   moveObstacles() {

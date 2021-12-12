@@ -55,6 +55,42 @@ function detectCollision(obstacle) {
   );
 }
 
+function createObstacles(side) {
+  const randomObstacleWidth = Math.floor(Math.random() * 160) + 100;
+  const randomObstacleX = -randomObstacleWidth;
+  const randomObstacleY = Math.floor(Math.random() * 600);
+  const randomObstacleHeight = 50;
+  const randomObstX = canvas.width;
+
+    if(side === "right") {
+
+    const rightSideObstacle = new Obstacles(
+      randomObstX,
+      randomObstacleY - 80,
+      randomObstacleWidth,
+      randomObstacleHeight,
+      side
+    );
+    currentGame.rightSideObst.push(rightSideObstacle);
+
+    }
+    
+
+    if(side === "left") {
+      //left side
+    const newObstacle = new Obstacles(
+      randomObstacleX,
+      randomObstacleY,
+      randomObstacleWidth,
+      randomObstacleHeight,
+      side
+    );
+    currentGame.obstacles.push(newObstacle);
+
+    }
+    
+}
+
 function updateCanvas() {
   clearCanvas();
 
@@ -75,34 +111,15 @@ function updateCanvas() {
   currentGame.obstFreq++;
 
   if (currentGame.obstFreq % 50 === 1) {
-    const randomObstacleWidth = Math.floor(Math.random() * 160) + 100;
-    const randomObstacleX = -randomObstacleWidth;
-    const randomObstacleY = Math.floor(Math.random() * 600);
-    const randomObstacleHeight = 50;
 
-    //right side
-    const randomObstX = canvas.width;
-
-    const rightSideObstacle = new Obstacles(
-      randomObstX,
-      randomObstacleY - 80,
-      randomObstacleWidth,
-      randomObstacleHeight
-    );
-    currentGame.rightSideObst.push(rightSideObstacle);
-
-    //left side
-    const newObstacle = new Obstacles(
-      randomObstacleX,
-      randomObstacleY,
-      randomObstacleWidth,
-      randomObstacleHeight
-    );
-    currentGame.obstacles.push(newObstacle);
+    createObstacles("right");
+    createObstacles("left");
+    
   }
 
   //right side
   currentGame.rightSideObst.forEach((obstacle, index) => {
+
     if (obstacle.x > canvas.width - obstacle.width && obstacle.forward) {
       obstacle.x -= 2;
     } else if (obstacle.x <= canvas.width - obstacle.width) {
@@ -114,28 +131,33 @@ function updateCanvas() {
     obstacle.moveObstacles();
     obstacle.drawObstRight();
 
-    //Check collision - right
-    if (detectCollision(obstacle)) {
-      currentGame.gameOver = true;
-      currentGame.obstFreq = 0;
-      currentGame.score = 0;
-      currentGame.rightSideObst = [];
-      currentGame.obstacles = [];
-      document.getElementById("score").innerHTML = 0;
-      // document.getElementById("game-board").style.display = "none";
-      pawHit.play();
-      cancelAnimationFrame(currentGame.animationId);
-      console.log("death by paw");
-    }
-
-    if (obstacle.x > canvas.width) {
-      // currentGame.score++;
-      currentGame.rightSideObst.splice(index, 1);
-    }
+ //Check collision - right
+    if(obstacle.side === "right"){
+      if (detectCollision(obstacle)) {
+        currentGame.gameOver = true;
+        currentGame.obstFreq = 0;
+        currentGame.score = 0;
+        currentGame.rightSideObst = [];
+        currentGame.obstacles = [];
+        document.getElementById("score").innerHTML = 0;
+        // document.getElementById("game-board").style.display = "none";
+        pawHit.play();
+        cancelAnimationFrame(currentGame.animationId);
+        console.log("death by paw");
+      }
+  
+      if (obstacle.x > canvas.width) {
+        // currentGame.score++;
+        currentGame.rightSideObst.splice(index, 1);
+      }
+    }   
+    
   });
 
   //left side
   currentGame.obstacles.forEach((obstacle, index) => {
+   
+
     if (obstacle.x < 0 && obstacle.forward) {
       obstacle.x += 2;
     } else if (obstacle.x >= 0) {
@@ -149,6 +171,7 @@ function updateCanvas() {
     obstacle.drawObst();
 
     //Check collision - left
+    if(obstacle.side === "left"){
     if (detectCollision(obstacle)) {
       currentGame.gameOver = true;
       currentGame.obstFreq = 0;
@@ -165,6 +188,7 @@ function updateCanvas() {
     if (obstacle.x + obstacle.width <= 0) {
       currentGame.obstacles.splice(index, 1);
     }
+  }
   });
 
   requestAnimationFrame(updateCanvas);
