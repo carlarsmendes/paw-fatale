@@ -128,38 +128,23 @@ function updateCanvas() {
     
   }
 
-  //right side
-  currentGame.rightSideObst.forEach((obstacle, index) => {
 
-    if (obstacle.x > canvas.width - obstacle.width && obstacle.forward) {
-      obstacle.x -= 2;
-    } else if (obstacle.x <= canvas.width - obstacle.width) {
-      obstacle.forward = false;
-      obstacle.x += 2;
-    } else {
-      obstacle.x += 2;
-    }
-    obstacle.moveObstacles();
-    obstacle.drawObst();
 
- //Check collision - right
-    if(obstacle.side === "right"){
-      if (detectCollision(obstacle)) {
-        collisionResult();
+  currentGame.allObstacles.forEach((obstacle, index) => {
+
+    if(obstacle.side === "right") {
+      //right side
+      if (obstacle.x > canvas.width - obstacle.width && obstacle.forward) {
+        obstacle.x -= 2;
+      } else if (obstacle.x <= canvas.width - obstacle.width) {
+        obstacle.forward = false;
+        obstacle.x += 2;
+      } else {
+        obstacle.x += 2;
       }
-  
-      if (obstacle.x > canvas.width) {
-        // currentGame.score++;
-        currentGame.rightSideObst.splice(index, 1);
-      }
-    }   
+     
+  } else if (obstacle.side === "left") {
     
-  });
-
-  //left side
-  currentGame.obstacles.forEach((obstacle, index) => {
-   
-
     if (obstacle.x < 0 && obstacle.forward) {
       obstacle.x += 2;
     } else if (obstacle.x >= 0) {
@@ -169,20 +154,93 @@ function updateCanvas() {
       obstacle.x -= 2;
     }
 
-    obstacle.moveObstacles();
+    
+  }
+
+  obstacle.moveObstacles();
     obstacle.drawObst();
 
-    //Check collision - left
-    if(obstacle.side === "left"){
+  
       if (detectCollision(obstacle)) {
         collisionResult();
       }
 
-    if (obstacle.x + obstacle.width <= 0) {
-      currentGame.obstacles.splice(index, 1);
-    }
-  }
+      if(obstacle.side === "right") {
+        if (obstacle.x > canvas.width) {
+          // currentGame.score++;
+           currentGame.allObstacles.splice(index, 1);
+        }
+      }
+
+      if(obstacle.side === "left") {
+        if (obstacle.x + obstacle.width <= 0) {
+           currentGame.allObstacles.splice(index, 1);
+        }
+      }
+  
+     
+   
+    
   });
+
+
+
+
+  //right side
+//   currentGame.rightSideObst.forEach((obstacle, index) => {
+
+//     if (obstacle.x > canvas.width - obstacle.width && obstacle.forward) {
+//       obstacle.x -= 2;
+//     } else if (obstacle.x <= canvas.width - obstacle.width) {
+//       obstacle.forward = false;
+//       obstacle.x += 2;
+//     } else {
+//       obstacle.x += 2;
+//     }
+//     obstacle.moveObstacles();
+//     obstacle.drawObst();
+
+//  //Check collision - right
+//     if(obstacle.side === "right"){
+//       if (detectCollision(obstacle)) {
+//         collisionResult();
+//       }
+  
+//       if (obstacle.x > canvas.width) {
+//         // currentGame.score++;
+//         currentGame.rightSideObst.splice(index, 1);
+//       }
+//     }   
+    
+//   });
+
+//   //left side
+//   currentGame.obstacles.forEach((obstacle, index) => {
+   
+
+//     if (obstacle.x < 0 && obstacle.forward) {
+//       obstacle.x += 2;
+//     } else if (obstacle.x >= 0) {
+//       obstacle.forward = false;
+//       obstacle.x -= 2;
+//     } else {
+//       obstacle.x -= 2;
+//     }
+
+//     obstacle.moveObstacles();
+//     obstacle.drawObst();
+
+//     //Check collision - left
+//     if(obstacle.side === "left"){
+//       if (detectCollision(obstacle)) {
+//         collisionResult();
+//       }
+
+//     if (obstacle.x + obstacle.width <= 0) {
+//       currentGame.obstacles.splice(index, 1);
+//     }
+//   }
+//   });
 
   requestAnimationFrame(updateCanvas);
 }
