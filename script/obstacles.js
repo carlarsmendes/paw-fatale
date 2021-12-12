@@ -12,6 +12,8 @@ class Obstacles {
 
     this.obstImgRight = new Image();
     this.obstImgRight.src = "./../images/cat-paw_ex_right.png";
+
+    this.img = new Image();
     this.side = side;
   }
 
@@ -20,7 +22,15 @@ class Obstacles {
   }
 
   drawObst() {
-    ctx.drawImage(this.obstImg, this.x, this.y, this.width, this.height);
+    if(this.side === "left"){
+      this.img.src = "./../images/cat-paw_ex.png";
+    } else if (this.side === "right") {
+      this.img.src = "./../images/cat-paw_ex.png";
+    } else {
+      console.error("Error in drawObst() method insice Obstacle class");
+    }
+    // ctx.drawImage(this.obstImg, this.x, this.y, this.width, this.height);
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     // ctx.fillStyle = "white";
     // ctx.fillRect(this.x, this.y, this.width, this.height);
   }
