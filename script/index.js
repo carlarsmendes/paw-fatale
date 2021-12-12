@@ -57,38 +57,49 @@ function detectCollision(obstacle) {
 
 function createObstacles(side) {
   const randomObstacleWidth = Math.floor(Math.random() * 160) + 100;
-  const randomObstacleX = -randomObstacleWidth;
-  const randomObstacleY = Math.floor(Math.random() * 600);
+  let randomObstacleX = -randomObstacleWidth;
+  let randomObstacleY = Math.floor(Math.random() * 600);
   const randomObstacleHeight = 50;
   const randomObstX = canvas.width;
 
-    if(side === "right") {
+  if(side === "right") {
+    randomObstacleX = canvas.width;
+  } else if(side === "left"){
+    
+    randomObstacleX = -randomObstacleWidth;
+    randomObstacleY -= 80;
+  } else {
+    console.error("Error in obstacle creation");
+  }
 
-    const rightSideObstacle = new Obstacles(
-      randomObstX,
+    const obstacle = new Obstacles(
+      randomObstacleX,
       randomObstacleY - 80,
       randomObstacleWidth,
       randomObstacleHeight,
       side
     );
-    currentGame.rightSideObst.push(rightSideObstacle);
 
+    if(side === "right") {
+    currentGame.rightSideObst.push(obstacle);
+    }  else if(side === "left"){
+      currentGame.obstacles.push(obstacle);
+    } else {
+      console.error("Error in obstacle creation");
     }
-    
+}
 
-    if(side === "left") {
-      //left side
-    const newObstacle = new Obstacles(
-      randomObstacleX,
-      randomObstacleY,
-      randomObstacleWidth,
-      randomObstacleHeight,
-      side
-    );
-    currentGame.obstacles.push(newObstacle);
-
-    }
-    
+function collisionResult() {
+  currentGame.gameOver = true;
+        currentGame.obstFreq = 0;
+        currentGame.score = 0;
+        currentGame.rightSideObst = [];
+        currentGame.obstacles = [];
+        document.getElementById("score").innerHTML = 0;
+        // document.getElementById("game-board").style.display = "none";
+        pawHit.play();
+        cancelAnimationFrame(currentGame.animationId);
+        console.log("death by paw");
 }
 
 function updateCanvas() {
@@ -134,16 +145,7 @@ function updateCanvas() {
  //Check collision - right
     if(obstacle.side === "right"){
       if (detectCollision(obstacle)) {
-        currentGame.gameOver = true;
-        currentGame.obstFreq = 0;
-        currentGame.score = 0;
-        currentGame.rightSideObst = [];
-        currentGame.obstacles = [];
-        document.getElementById("score").innerHTML = 0;
-        // document.getElementById("game-board").style.display = "none";
-        pawHit.play();
-        cancelAnimationFrame(currentGame.animationId);
-        console.log("death by paw");
+        collisionResult();
       }
   
       if (obstacle.x > canvas.width) {
@@ -172,18 +174,9 @@ function updateCanvas() {
 
     //Check collision - left
     if(obstacle.side === "left"){
-    if (detectCollision(obstacle)) {
-      currentGame.gameOver = true;
-      currentGame.obstFreq = 0;
-      currentGame.score = 0;
-      currentGame.rightSideObst = [];
-      currentGame.obstacles = [];
-      document.getElementById("score").innerHTML = 0;
-      // document.getElementById("game-board").style.display = "none";
-      pawHit.play();
-      cancelAnimationFrame(currentGame.animationId);
-      console.log("death by paw");
-    }
+      if (detectCollision(obstacle)) {
+        collisionResult();
+      }
 
     if (obstacle.x + obstacle.width <= 0) {
       currentGame.obstacles.splice(index, 1);
