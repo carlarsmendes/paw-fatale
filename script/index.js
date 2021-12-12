@@ -129,7 +129,7 @@ function updateCanvas() {
       obstacle.x += 2;
     }
     obstacle.moveObstacles();
-    obstacle.drawObstRight();
+    obstacle.drawObst();
 
  //Check collision - right
     if(obstacle.side === "right"){

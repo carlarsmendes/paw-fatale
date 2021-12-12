@@ -7,11 +7,11 @@ class Obstacles {
     this.height = height;
     this.forward = true;
     this.speed = -0.2;
-    this.obstImg = new Image();
-    this.obstImg.src = "./../images/cat-paw_ex.png";
+    // this.obstImg = new Image();
+    // this.obstImg.src = "./../images/cat-paw_ex.png";
 
-    this.obstImgRight = new Image();
-    this.obstImgRight.src = "./../images/cat-paw_ex_right.png";
+    // this.obstImgRight = new Image();
+    // this.obstImgRight.src = "./../images/cat-paw_ex_right.png";
 
     this.img = new Image();
     this.side = side;
@@ -25,7 +25,7 @@ class Obstacles {
     if(this.side === "left"){
       this.img.src = "./../images/cat-paw_ex.png";
     } else if (this.side === "right") {
-      this.img.src = "./../images/cat-paw_ex.png";
+      this.img.src = "./../images/cat-paw_ex_right.png";
     } else {
       console.error("Error in drawObst() method insice Obstacle class");
     }
@@ -35,7 +35,7 @@ class Obstacles {
     // ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  drawObstRight() {
-    ctx.drawImage(this.obstImgRight, this.x, this.y, this.width, this.height);
-  }
+  // drawObstRight() {
+  //   ctx.drawImage(this.obstImgRight, this.x, this.y, this.width, this.height);
+  // }
 }
